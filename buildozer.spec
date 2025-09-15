@@ -3,35 +3,28 @@ title = BCC Control
 package.name = bcccontrol  
 package.domain = org.ceet.bcc
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,txt,jpeg,db
-version = 1.7
-requirements = python3,kivy
+source.include_exts = py,png,jpg,kv,txt
+version = 1.0
+requirements = python3,kivy==2.0.0
 icon.filename = CEET.png
-presplash.filename = CEET.png
 orientation = portrait
 
 [buildozer]
 log_level = 2
 
 [android]
-# Versions simples et stables
+# Versions très stables - évitent les erreurs autotools
 api = 27
-minapi = 21
-ndk = 17c
+minapi = 21  
+ndk = 19b
 sdk = 27
 
-# Permissions de base
+# Configuration simple
+android.accept_sdk_license = True
+android.orientation = portrait
+android.icon = CEET.png
+android.archs = armeabi-v7a
 android.permissions = INTERNET
 
-# Orientation forcée en vertical
-android.orientation = portrait
-
-# Logo/Icône
-android.icon = CEET.png
-
-# Acceptation automatique des licences
-android.accept_sdk_license = True
+# Éviter les complications
 android.skip_update = False
-
-# Architecture simple
-android.archs = armeabi-v7a
