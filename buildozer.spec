@@ -7,7 +7,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,txt,jpeg,db
 source.include_patterns = Pages/*,*.db,CEET.png
 
-version = 1.3
+version = 1.7
 requirements = python3,kivy,kivymd,pillow
 icon.filename = %(source.dir)s/CEET.png
 
