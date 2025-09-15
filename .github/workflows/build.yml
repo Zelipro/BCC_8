@@ -1,25 +1,23 @@
 name: Build APK - AIDL Fix
-
 on:
   push:
     branches: [ main, master ]
-
 jobs:
   build-android:
     name: Build for Android
-    runs-on: ubuntu-20.04  # Version LTS stable
+    runs-on: ubuntu-22.04  # ✅ Version supportée (ubuntu-20.04 est dépréciée)
     
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5  # ✅ Version mise à jour
         with:
           python-version: '3.9'
           
       - name: Setup Java JDK 8 (requis pour Android)
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4  # ✅ Version mise à jour
         with:
           distribution: 'temurin'
           java-version: '8'
@@ -35,11 +33,11 @@ jobs:
       - name: Install Buildozer with fixed versions
         run: |
           pip3 install --upgrade pip
-          pip3 install buildozer==1.4.0
-          pip3 install cython==0.29.33
+          pip3 install buildozer==1.5.0  # ✅ Version plus récente et stable
+          pip3 install cython==0.29.36   # ✅ Version mise à jour
           
       - name: Cache Buildozer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4  # ✅ Version mise à jour
         with:
           path: |
             ~/.buildozer
@@ -52,8 +50,11 @@ jobs:
           
       - name: Build APK
         run: |
-          # Accepter toutes les licences Android automatiquement
-          yes | buildozer android debug || buildozer android debug
+          # Configuration des variables d'environnement avant le build
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
+          # Build avec gestion d'erreur améliorée
+          buildozer android debug || (echo "Build failed, retrying..." && buildozer android debug)
         env:
           ANDROID_SDK_ROOT: /home/runner/.buildozer/android/platform/android-sdk
           ANDROID_HOME: /home/runner/.buildozer/android/platform/android-sdk
@@ -63,3 +64,4 @@ jobs:
         with:
           name: bcc-control-apk
           path: bin/*.apk
+        if: always()  # ✅ Upload même si des étapes précédentes ont échoué
